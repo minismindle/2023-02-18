@@ -1,0 +1,66 @@
+// 다형성(Polymorphism = Poly + morph) = 겉은 똑같은데, 기능이 다르게 동작한다.
+//-오버로딩 = 함수 중복 정의 = 함수 이름의 재사용
+//-오버라이딩 = 재정의 = 부모 클래스의 함수를 자식 클래스에서 재정의
+
+// 바인딩 = 묶는다.
+// 정적 바인딩 : 컴파일 시점에 결정
+// 동적 바인딩 : 실행 시점에 결정
+
+// 일반 함수는 정적 바인딩을 사용
+// 동적 바인딩을 원한다면? -> 가상 함수
+// 그런데 실제 객체가 어떤 타입인지 어떻게 알고 알아서 가상 함수를 호출해준걸까?
+// -가상 함수 테이블
+// 가상함수테이블 [] 4바이트(32) 8바이트(64)
+// [VMove] [VDie]
+// 순수 가상 함수 : 구현은 없고 '인터페이스'만 존재하는 함수
+// 추상 클래스 : 순수 가상 함수가 1개 이상 포함되면 바로 추상 클래스로 간주
+// 직접적으로 객체를 만들 수 없게 됨
+class Player
+{
+
+public:
+    Player()
+    {
+        _hp = 100;
+    }
+    void Move() { cout << "Move Player !" << endl; }
+    //void Move(int a) { cout << "Move Player (int) !" << endl; }
+    virtual void VMove() { cout << "Move Player !" << endl; }
+    virtual void VDie() { cout << "Die Player !" << endl;}
+    //순수 가상 함수
+    virtual void VAttack() = 0;
+public:
+    int _hp;
+};
+
+class Knight : public Player
+{
+    
+public:
+    Knight()
+    {
+        _stamina = 100;
+    }
+    void Move() { cout << "Move Knight !" << endl; }
+    // 가상 함수는 재정의를 하더라도 가상 함수다!!
+    void VMove() { cout << "Move Knight !" << endl; }
+    void VDie() { cout << "Die Knight !" << endl; }
+    void VAttack() { cout << "Attack Knight" << endl; }
+
+public:
+    int _stamina;
+};
+class Mage : public Player
+{
+public:
+    int _mp;
+};
+
+// [ [ Player ] ]
+// [   knight   ]
+
+void MovePlayer(Player* player)
+{
+    player->VMove();
+    player->VDie();
+}
